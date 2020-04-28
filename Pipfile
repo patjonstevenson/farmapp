@@ -13,6 +13,7 @@ django-allauth = "*"
 django-cors-headers = "*"
 django-rest-api = "*"
 psycopg2-binary = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.7"
