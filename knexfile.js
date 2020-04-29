@@ -4,7 +4,7 @@ module.exports = {
 
   development: {
     client: 'sqlite3',
-    connection: `postgres://${process.env.DB_PRODUCTION_USER}:${process.env.DB_PRODUCTION_PW}@${process.env.DB_PRODUCTION_HOST}:${process.env.DB_PRODUCTION_PORT}/${process.env.DATABASE_PRODUCTION}`,
+    connection: `postgres://${process.env.DB_USER}:${process.env.DB_PW}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DATABASE}`,
   },
 
   staging: {
