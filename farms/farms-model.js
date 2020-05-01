@@ -25,8 +25,17 @@ function updatePump(changes, id) {
     return db('farmdb.pumps').where({ id }).update(changes)
 }
 // TODO: delete pump
+function deletePump(id) {
+    return db('farmsdb.pumps').where({ id }).del();
+}
 // TODO: find pump
+function findPumpById(id) {
+    return db('farmsdb.pumps').where({ id }).first();
+}
 // TODO: add valve
+function addValve(valve) {
+    return db('farmsdb.valves').insert(valve, 'id');
+}
 // TODO: update valve
 // TODO: delete valve
 // TODO: find valve
