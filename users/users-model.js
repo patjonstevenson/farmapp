@@ -13,8 +13,13 @@ async function add(user) {
     return findById(id);
 }
 
+function getUserId(filter) {
+    return db('farmdb.users as u').where(filter).select('u.id').first();
+}
+
 module.exports = {
     findBy,
     findById,
-    add
+    add,
+    getUserId
 }
