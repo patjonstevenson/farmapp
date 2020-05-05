@@ -6,7 +6,7 @@ function formatFarmsInfo({ farms, pumps, strategies }) {
         pumps: pumps
             .filter(pump => pump.farm_id === farm.id)
             .map(pump => {
-                const strats = strategies.find(s => s.strategy_id === pump.strategy_id);
+                const strats = strategies.filter(s => s.strategy_id === pump.strategy_id);
                 const { strategy_name, strategy_id } = strats;
                 return ({
                     pump_id: pump.pump_id,
