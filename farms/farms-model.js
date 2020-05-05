@@ -1,4 +1,5 @@
 const db = require('../database/dbConfig');
+const Pump = require('../pumps/pumps-model.js');
 
 module.exports = {
     // Farms
@@ -43,6 +44,8 @@ module.exports = {
     are included in the objects being passed to them.
 */
 
+// FARMS
+
 function addFarm(farm) {
     return db('farmdb.farms').insert(farm, 'id');
 }
@@ -75,7 +78,7 @@ async function getFarmInfoByUser(user_id) {
         // get farms DONE
         const farms = await findFarmsByUser(user_id);
         // get pumps and valves DONE
-        const pumps = await findPumpsByUser(user_id);
+        const pumps = await Pump.findPumpsByUser(user_id);
         // get strategies and tactics DONE
         const strategies = await findStrategiesByUser(user_id);
         return ({
@@ -105,6 +108,8 @@ async function getFarmInfoByUser(user_id) {
 //             't.id as tactic_id', 't.time', 't.humidity_high' // tactic
 //         )
 // }
+
+// PUMPS
 
 function addPump(pump) {
     return db('farmdb.pumps').insert(pump, 'id');
@@ -149,6 +154,8 @@ function findPumpsByUser(user_id) {
         );
 }
 
+// VALVES
+
 function addValve(valve) {
     return db('farmdb.valves').insert(valve, 'id');
 }
@@ -169,6 +176,9 @@ function findValveBy(filter) {
 }
 // TODO: add pump group (pump with valves) ? (or implement separately?)
 // TODO: other pump group fns (if using pump groups)
+
+// STRATEGIES
+
 // TODO: add strategy (with tactics)
 function addStrategy(strategy) {
     return db('farmdb.strategies').insert(strategy, 'id');
@@ -197,7 +207,7 @@ function findStrategiesByUser(user_id) {
         .join('farmdb.strategies as s', 's.id', 'f.strategy_id')
         .join('farmid.tactics as t', 't.strategy_id', 's.id')
         .where({ 'u.id': user_id })
-        .groupBy('stra')
+        // .groupBy('stra')
         .select(
             's.id as strategy_id', 's.name as strategy_name', // strategy
             't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
@@ -216,6 +226,8 @@ function findStrategyByFarm(farm_id) {
             't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
         );
 }
+
+// TACTICS
 
 function addTactic(tactic) {
     return db('farmdb.tactics').insert(tactic, 'id');

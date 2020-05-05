@@ -79,3 +79,5 @@ router.delete('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
+
+module.exports = router;
