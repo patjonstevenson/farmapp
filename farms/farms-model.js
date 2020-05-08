@@ -47,25 +47,25 @@ module.exports = {
 // FARMS
 
 function addFarm(farm) {
-    return db('farmdb.farms').insert(farm, 'id');
+    return db('farms').insert(farm, 'id');
 }
 
 function updateFarm(changes, id) {
-    return db('farmdb.farms').where({ id }).update(changes);
+    return db('farms').where({ id }).update(changes);
 }
 
 function deleteFarm(id) {
-    return db('farmdb.farms').where({ id }).del();
+    return db('farms').where({ id }).del();
 }
 
 function findFarmsBy(filter) {
-    return db('farmdb.farms').where(filter);
+    return db('farms').where(filter);
 }
 
 // TODO
 function findFarmsByUser(user_id) {
-    return db('farmdb.users as u')
-        .join('farmdb.farms as f', 'f.user_id', 'u.id')
+    return db('users as u')
+        .join('farms as f', 'f.user_id', 'u.id')
         .where({ 'u.id': user_id })
         .select(
             'f.id as farm_id', 'f.name as farm_name', 'f.timezone'
@@ -93,12 +93,12 @@ async function getFarmInfoByUser(user_id) {
 // // TODO
 // function getFarmInfoByUser(user_id) {
 //     // This needs to go to a formatting helper function from farms-helpers.js
-//     return db('farmdb.users as u')
-//         .join('farmdb.farms as f', 'f.user_id', 'u.id')
-//         .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
-//         .join('farmdb.valves as v', 'v.pump_id', 'p.id')
-//         .join('farmdb.strategies as s', 's.id', 'p.strategy_id')
-//         .join('farmdb.tactics as t', 't.strategy_id', 's.id')
+//     return db('users as u')
+//         .join('farms as f', 'f.user_id', 'u.id')
+//         .join('pumps as p', 'p.farm_id', 'f.id')
+//         .join('valves as v', 'v.pump_id', 'p.id')
+//         .join('strategies as s', 's.id', 'p.strategy_id')
+//         .join('tactics as t', 't.strategy_id', 's.id')
 //         .where({ 'u.id': user_id })
 //         .select(
 //             'f.id as farm_id', 'f.name as farm_name', 'f.timezone', // farm
@@ -112,29 +112,29 @@ async function getFarmInfoByUser(user_id) {
 // PUMPS
 
 function addPump(pump) {
-    return db('farmdb.pumps').insert(pump, 'id');
+    return db('pumps').insert(pump, 'id');
 }
 
 function updatePump(changes, id) {
-    return db('farmdb.pumps').where({ id }).update(changes);
+    return db('pumps').where({ id }).update(changes);
 }
 
 function deletePump(id) {
-    return db('farmdb.pumps').where({ id }).del();
+    return db('pumps').where({ id }).del();
 }
 
 function findPumpById(id) {
-    return db('farmdb.pumps').where({ id }).first();
+    return db('pumps').where({ id }).first();
 }
 
 function findPumpBy(filter) {
-    return db('farmdb.pumps').where(filter);
+    return db('pumps').where(filter);
 }
 
 // TODO
 function findPumpsByFarm(farm_id) {
-    return db('farmdb.farms as f')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
+    return db('farms as f')
+        .join('pumps as p', 'p.farm_id', 'f.id')
         .where({ 'f.id': farm_id })
         .select(
             'p'
@@ -143,10 +143,10 @@ function findPumpsByFarm(farm_id) {
 
 
 function findPumpsByUser(user_id) {
-    return db('farmdb.users as u')
-        .join('farmdb.farms as f', 'f.user_id', 'u.id')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
-        .join('farmdb.valves as v', 'v.pump_id', 'v.id')
+    return db('users as u')
+        .join('farms as f', 'f.user_id', 'u.id')
+        .join('pumps as p', 'p.farm_id', 'f.id')
+        .join('valves as v', 'v.pump_id', 'v.id')
         .where({ 'u.id': user_id })
         .select(
             'p.id as pump_id', 'p.name as pump_name', 'p.farm_id', 'p.strategy_id', // pump
@@ -157,22 +157,22 @@ function findPumpsByUser(user_id) {
 // VALVES
 
 function addValve(valve) {
-    return db('farmdb.valves').insert(valve, 'id');
+    return db('valves').insert(valve, 'id');
 }
 
 function updateValve(changes, id) {
-    return db('farmdb.valves').where({ id }).update(changes);
+    return db('valves').where({ id }).update(changes);
 }
 
 function deleteValve(id) {
-    return db('farmdb.valves').where({ id }).del();
+    return db('valves').where({ id }).del();
 }
 
 function findValveById(id) {
-    return db('farmdb.valves').where({ id }).first();
+    return db('valves').where({ id }).first();
 }
 function findValveBy(filter) {
-    return db('farmdb.valves').where(filter);
+    return db('valves').where(filter);
 }
 // TODO: add pump group (pump with valves) ? (or implement separately?)
 // TODO: other pump group fns (if using pump groups)
@@ -181,30 +181,30 @@ function findValveBy(filter) {
 
 // TODO: add strategy (with tactics)
 function addStrategy(strategy) {
-    return db('farmdb.strategies').insert(strategy, 'id');
+    return db('strategies').insert(strategy, 'id');
 }
 
 function updateStrategy(changes, id) {
-    return db('farmdb.strategies').where({ id }).update(changes);
+    return db('strategies').where({ id }).update(changes);
 }
 
 function deleteStrategy(id) {
-    return db('farmdb.strategies').where({ id }).del();
+    return db('strategies').where({ id }).del();
 }
 
 function findStrategyById(id) {
-    return db('farmdb.strategies').where({ id }).first();
+    return db('strategies').where({ id }).first();
 }
 function findStrategyBy(filter) {
-    return db('farmdb.strategies').where(filter);
+    return db('strategies').where(filter);
 }
 
 function findStrategiesByUser(user_id) {
     // Returns list of strategies by user
-    return db('farmdb.users as u')
-        .join('farmdb.farms as f', 'f.user_id', 'u.id')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
-        .join('farmdb.strategies as s', 's.id', 'f.strategy_id')
+    return db('users as u')
+        .join('farms as f', 'f.user_id', 'u.id')
+        .join('pumps as p', 'p.farm_id', 'f.id')
+        .join('strategies as s', 's.id', 'f.strategy_id')
         .join('farmid.tactics as t', 't.strategy_id', 's.id')
         .where({ 'u.id': user_id })
         // .groupBy('stra')
@@ -216,9 +216,9 @@ function findStrategiesByUser(user_id) {
 
 function findStrategyByFarm(farm_id) {
     // Returns list of strategies by farm
-    return db('farmdb.farms as f')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
-        .join('farmdb.strategies as s', 's.id', 'f.strategy_id')
+    return db('farms as f')
+        .join('pumps as p', 'p.farm_id', 'f.id')
+        .join('strategies as s', 's.id', 'f.strategy_id')
         .join('farmid.tactics as t', 't.strategy_id', 's.id')
         .where({ 'f.id': farm_id })
         .select(
@@ -230,23 +230,23 @@ function findStrategyByFarm(farm_id) {
 // TACTICS
 
 function addTactic(tactic) {
-    return db('farmdb.tactics').insert(tactic, 'id');
+    return db('tactics').insert(tactic, 'id');
 }
 
 function updateTactic(changes, id) {
-    return db('farmdb.tactics').where({ id }).update(changes);
+    return db('tactics').where({ id }).update(changes);
 }
 
 function deleteTactic(id) {
-    return db('farmdb.tactics').where({ id }).del();
+    return db('tactics').where({ id }).del();
 }
 
 function findTacticBy(filter) {
-    return db('farmdb.tactics').where(filter);
+    return db('tactics').where(filter);
 }
 
 function findTacticById(id) {
-    return db('farmdb.tactics').where({ id }).first();
+    return db('tactics').where({ id }).first();
 }
 
 // TODO: assign strategy to pump (could just do using update pump)

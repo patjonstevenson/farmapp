@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const Users = require("./auth-model");
+// const Users = require("./auth-model");
+const Users = require("../users/users-model");
 
 module.exports = {
     getJwtToken,
@@ -26,6 +27,7 @@ async function validateUser(user) {
     const oldUser = await Users.findBy({ email: user.email });
     const emailExists = oldUser.length > 0;
     console.log(emailExists);
+
     if (emailExists) {
         errors = [...errors, "An account with the provided email already exists."];
         console.log(errors);

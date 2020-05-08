@@ -17,8 +17,9 @@ router.post("/register", async (req, res) => {
 
     Users.add(user)
       .then(userN => {
+        const { password, ...new_user } = userN;
         const token = getJwtToken(userN.email, userN.password);
-        res.status(200).json({ userN, token })
+        res.status(200).json({ user: new_user, token })
       })
       .catch(error => res.status(500).json({ message: 'Unable to retrieve new user.', error }))
   } else {

@@ -32,19 +32,23 @@ router.get('/:farm_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.post('/', idMiddleware, async (req, res) => {
-    const { id } = req.params;
-    const farm = req.body;
+router.post('/', async (req, res) => {
+    // const { id } = req.params;
+    const { id, ...farm } = req.body;
     try {
         const new_id = await Farm.addFarm({ ...farm, user_id: id });
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding farm.', error: new_id.error });
         } else {
-            const newFarm = await Farm.findFarmsBy({ id: new_id });
+            console.log("Made it to else (no error from Farm.addFarm)");
+            console.log(`typeof 8: ${typeof 8}`)
+            console.log(`Type of new_id: ${typeof Number(new_id)}`);
+            console.log(`new_id =  ${new_id}`);
+            const newFarm = await Farm.findFarmsBy({ id: Number(new_id) });
             res.status(200).json({ newFarm });
         }
     } catch (error) {
-        console.log(`\n\nERROR in POST to /users/${req.params.id}/farms\n${error}`);
+        console.log(`\n\nERROR in POST to /users/${id}/farms\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

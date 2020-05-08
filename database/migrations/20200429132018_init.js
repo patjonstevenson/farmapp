@@ -15,7 +15,7 @@ exports.up = function (knex) {
             Farms.string("name").notNullable();
             // Farms.string("latitude");
             // Farms.string("longitude");
-            Farms.string("timezone").notNullable();
+            Farms.string("timezone").notNullable(); 
             Farms.integer("user_id")
                 .unsigned()
                 .references("id")
