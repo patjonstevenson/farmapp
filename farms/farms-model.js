@@ -37,7 +37,7 @@ module.exports = {
     deleteTactic,
     findTacticBy,
     findTacticById
-}
+};
 
 /*
     NOTE: All add functions assume the relevant foreign keys

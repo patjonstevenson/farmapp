@@ -1,21 +1,21 @@
 const db = require('../database/dbConfig');
 
 module.exports = {
-        // Strategies
-        addStrategy,
-        updateStrategy,
-        deleteStrategy,
-        findStrategyBy,
-        findStrategyById,
-        findStrategyByFarm,
-        findStrategiesByUser,
-        // Tactics
-        addTactic,
-        updateTactic,
-        deleteTactic,
-        findTacticBy,
-        findTacticById
-}
+    // Strategies
+    addStrategy,
+    updateStrategy,
+    deleteStrategy,
+    findStrategyBy,
+    findStrategyById,
+    findStrategiesByFarm,
+    findStrategiesByUser,
+    // Tactics
+    addTactic,
+    updateTactic,
+    deleteTactic,
+    findTacticBy,
+    findTacticById
+};
 
 
 // STRATEGIES
@@ -36,6 +36,7 @@ function deleteStrategy(id) {
 function findStrategyById(id) {
     return db('farmdb.strategies').where({ id }).first();
 }
+
 function findStrategyBy(filter) {
     return db('farmdb.strategies').where(filter);
 }
@@ -55,7 +56,7 @@ function findStrategiesByUser(user_id) {
         );
 }
 
-function findStrategyByFarm(farm_id) {
+function findStrategiesByFarm(farm_id) {
     // Returns list of strategies by farm
     return db('farmdb.farms as f')
         .join('farmdb.pumps as p', 'p.farm_id', 'f.id')

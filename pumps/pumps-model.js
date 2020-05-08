@@ -15,7 +15,7 @@ module.exports = {
     deleteValve,
     findValveBy,
     findValveById,
-}
+};
 
 // PUMPS
 

@@ -4,7 +4,7 @@ const helpers = require('./farms-helpers');
 const router = require('express').Router();
 const idMiddleware = require('../users/validate-id-middleware');
 
-router.get('/:id/farms', idMiddleware, async (req, res) => {
+router.get('/', idMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const farms = await Farm.findFarmsByUser(id);
@@ -18,8 +18,8 @@ router.get('/:id/farms', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.get('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
-    const { id, farm_id } = req.params;
+router.get('/:farm_id', idMiddleware, async (req, res) => {
+    const { farm_id } = req.params;
     try {
         const farms = await Farm.findFarmsBy({ id: farm_id });
         if (farms.error) {
@@ -32,7 +32,7 @@ router.get('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.post('/:id/farms', idMiddleware, async (req, res) => {
+router.post('/', idMiddleware, async (req, res) => {
     const { id } = req.params;
     const farm = req.body;
     try {
@@ -48,7 +48,7 @@ router.post('/:id/farms', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.put('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
+router.put('/:farm_id', idMiddleware, async (req, res) => {
     const { farm_id } = req.params;
     const changes = req.body;
     try {
@@ -64,7 +64,7 @@ router.put('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.delete('/:id/farms/:farm_id', idMiddleware, async (req, res) => {
+router.delete('/:farm_id', idMiddleware, async (req, res) => {
     const { farm_id } = req.params;
     try {
         const deleted = await Farm.deleteFarm(farm_id);
