@@ -40,7 +40,7 @@ server.use(express.json());
 server.use("/api/auth", authRouter);
 
 server.use("/api/users/:id/farms/:farm_id/pumps/", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, pumpsRouter);
-server.use("/api/users/:id/farms", testMiddleware, authMiddleware, idMiddleware, farmsRouter);
+server.use("/api/users/:id/farms", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, farmsRouter);
 server.use("/api/users/:id/strategies", authMiddleware, idMiddleware, strategiesRouter)
 server.use("/api/users", authMiddleware, usersRouter);
 
