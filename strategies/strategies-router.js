@@ -7,7 +7,7 @@ const router = require('express').Router();
 // STRATEGIES
 
 router.get('/', async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body.params;
     try {
         const strategies = await Strategy.findStrategiesByUser(id);
         if (strategies.error) {
@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
             res.status(200).json({ strategies });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/strategies\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        console.log(`\n\nERROR in GET to /users/${id}/strategies\n${error}`);
+        res.status(500).json({ message: "Internal server error.", error });
     }
 });
 router.get('/:strategy_id', async (req, res) => {

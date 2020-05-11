@@ -21,6 +21,7 @@ const authMiddleware = require("../auth/authenticate-middleware");
 const idMiddleware = require("../users/validate-id-middleware");
 
 const testMiddleware = require("./request-path-middleware");
+// Puts params in body
 const requestParamsMiddleware = require('./request-params-middleware');
 
 // =============================================
@@ -41,7 +42,7 @@ server.use("/api/auth", authRouter);
 
 server.use("/api/users/:id/farms/:farm_id/pumps/", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, pumpsRouter);
 server.use("/api/users/:id/farms", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, farmsRouter);
-server.use("/api/users/:id/strategies", authMiddleware, idMiddleware, strategiesRouter)
+server.use("/api/users/:id/strategies", requestParamsMiddleware, authMiddleware, idMiddleware, strategiesRouter)
 server.use("/api/users", authMiddleware, usersRouter);
 
 // =============================================
