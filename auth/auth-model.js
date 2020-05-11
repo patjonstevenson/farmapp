@@ -11,9 +11,11 @@ async function add(user) {
     } catch (error) {
         return { error };
     }
-
 }
 
+
+
 module.exports = {
-    add
+    add,
+    findBy: users.findBy
 }

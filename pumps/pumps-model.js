@@ -20,29 +20,29 @@ module.exports = {
 // PUMPS
 
 function addPump(pump) {
-    return db('farmdb.pumps').insert(pump, 'id');
+    return db('pumps').insert(pump, 'id');
 }
 
 function updatePump(changes, id) {
-    return db('farmdb.pumps').where({ id }).update(changes);
+    return db('pumps').where({ id }).update(changes);
 }
 
 function deletePump(id) {
-    return db('farmdb.pumps').where({ id }).del();
+    return db('pumps').where({ id }).del();
 }
 
 function findPumpById(id) {
-    return db('farmdb.pumps').where({ id }).first();
+    return db('pumps').where({ id }).first();
 }
 
 function findPumpBy(filter) {
-    return db('farmdb.pumps').where(filter);
+    return db('pumps').where(filter);
 }
 
 // TODO
 function findPumpsByFarm(farm_id) {
-    return db('farmdb.farms as f')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
+    return db('farms as f')
+        .join('pumps as p', 'p.farm_id', 'f.id')
         .where({ 'f.id': farm_id })
         .select(
             'p'
@@ -50,10 +50,10 @@ function findPumpsByFarm(farm_id) {
 }
 
 function findPumpsByUser(user_id) {
-    return db('farmdb.users as u')
-        .join('farmdb.farms as f', 'f.user_id', 'u.id')
-        .join('farmdb.pumps as p', 'p.farm_id', 'f.id')
-        .join('farmdb.valves as v', 'v.pump_id', 'v.id')
+    return db('users as u')
+        .join('farms as f', 'f.user_id', 'u.id')
+        .join('pumps as p', 'p.farm_id', 'f.id')
+        .join('valves as v', 'v.pump_id', 'v.id')
         .where({ 'u.id': user_id })
         .select(
             'p.id as pump_id', 'p.name as pump_name', 'p.farm_id', 'p.strategy_id', // pump
@@ -64,22 +64,22 @@ function findPumpsByUser(user_id) {
 // VALVES
 
 function addValve(valve) {
-    return db('farmdb.valves').insert(valve, 'id');
+    return db('valves').insert(valve, 'id');
 }
 
 function updateValve(changes, id) {
-    return db('farmdb.valves').where({ id }).update(changes);
+    return db('valves').where({ id }).update(changes);
 }
 
 function deleteValve(id) {
-    return db('farmdb.valves').where({ id }).del();
+    return db('valves').where({ id }).del();
 }
 
 function findValveById(id) {
-    return db('farmdb.valves').where({ id }).first();
+    return db('valves').where({ id }).first();
 }
 function findValveBy(filter) {
-    return db('farmdb.valves').where(filter);
+    return db('valves').where(filter);
 }
 // TODO: add pump group (pump with valves) ? (or implement separately?)
 // TODO: other pump group fns (if using pump groups)

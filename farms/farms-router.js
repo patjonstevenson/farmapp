@@ -4,8 +4,10 @@ const helpers = require('./farms-helpers');
 const router = require('express').Router();
 const idMiddleware = require('../users/validate-id-middleware');
 
-router.get('/', idMiddleware, async (req, res) => {
-    const { id } = req.params;
+router.get('/', async (req, res) => {
+    // const { id } = req.params;
+    const { id } = req.body;
+    console.log(`\n\nRUNNING GET TO /farms/ for user_id: ${id}\n`);
     try {
         const farms = await Farm.findFarmsByUser(id);
         if (farms.error) {
@@ -14,7 +16,7 @@ router.get('/', idMiddleware, async (req, res) => {
             res.status(200).json({ farms });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${req.body.id}/farms\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

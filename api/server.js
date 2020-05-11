@@ -20,6 +20,9 @@ const strategiesRouter = require("../strategies/strategies-router");
 const authMiddleware = require("../auth/authenticate-middleware");
 const idMiddleware = require("../users/validate-id-middleware");
 
+const testMiddleware = require("./request-path-middleware");
+const requestParamsMiddleware = require('./request-params-middleware');
+
 // =============================================
 // SERVER CREATION AND CONFIGURATION
 
@@ -31,13 +34,15 @@ const server = express();
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
+// server.use(requestParamsMiddleware);
 
 // Assignment of routers and middleware to routes
 server.use("/api/auth", authRouter);
-server.use("/api/users", authMiddleware, usersRouter);
-server.use("/api/users/:id/farms", authMiddleware, idMiddleware, farmsRouter);
-server.use("/api/users/:id/farms/:farm_id/pumps", authMiddleware, idMiddleware, pumpsRouter);
+
+server.use("/api/users/:id/farms/:farm_id/pumps/", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, pumpsRouter);
+server.use("/api/users/:id/farms", testMiddleware, authMiddleware, idMiddleware, farmsRouter);
 server.use("/api/users/:id/strategies", authMiddleware, idMiddleware, strategiesRouter)
+server.use("/api/users", authMiddleware, usersRouter);
 
 // =============================================
 

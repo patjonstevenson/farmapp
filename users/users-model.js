@@ -14,6 +14,7 @@ async function add(user) {
 }
 
 function getUserId(filter) {
+    console.log("GET USER ID");
     return db('users as u').where(filter).select('u.id').first();
 }
 

@@ -64,12 +64,16 @@ function findFarmsBy(filter) {
 
 // TODO
 function findFarmsByUser(user_id) {
-    return db('users as u')
-        .join('farms as f', 'f.user_id', 'u.id')
-        .where({ 'u.id': user_id })
-        .select(
-            'f.id as farm_id', 'f.name as farm_name', 'f.timezone'
-        );
+    console.log(`Running findFarmsByUser for user_id: ${user_id}`);
+    // return db('users as u')
+    //     .join('farms as f', 'f.user_id', 'u.id')
+    //     .where({ 'u.id': user_id })
+    //     .select(
+    //         'f.id as farm_id', 'f.name as farm_name', 'f.timezone'
+    //     );
+    return db('farms as f')
+        .where({ 'f.user_id': user_id })
+        .select('*');
 }
 
 // TODO
