@@ -45,7 +45,7 @@ function findPumpsByFarm(farm_id) {
         .join('pumps as p', 'p.farm_id', 'f.id')
         .where({ 'f.id': farm_id })
         .select(
-            'p'
+            'p.id as pump_id', 'p.name', 'p.strategy_id', 'p.farm_id'
         );
 }
 

@@ -35,9 +35,10 @@ router.get('/:strategy_id', async (req, res) => {
     }
 });
 router.post('/', async (req, res) => {
-    const strategy = req.body;
+    const { params, id, ...strategy } = req.body;
+    console.log("\nSTRATEGY (from req.body):\n", strategy);
     try {
-        const new_id = await Strategy.addStrategy(strategy);
+        const [new_id] = await Strategy.addStrategy(strategy);
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding strategy.', error: new_id.error });
         } else {
@@ -45,7 +46,7 @@ router.post('/', async (req, res) => {
             res.status(200).json({ newStrategy });
         }
     } catch (error) {
-        console.log(`\n\nERROR in POST to /users/${req.params.id}/strategies\n${error}`);
+        console.log(`\n\nERROR in POST to /users/${req.body.params.id}/strategies\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

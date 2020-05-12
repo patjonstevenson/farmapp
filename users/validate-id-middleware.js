@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
             console.log("EQUAL? ", id === Number(req.body.params.id));
             if (Number(req.body.params.id) === id) {
                 console.log("Valid");
-                req.body.id = id;
+                req.body.id = id; // DO WE NEED THIS???
                 next();
             } else {
                 console.log("Invalid");
