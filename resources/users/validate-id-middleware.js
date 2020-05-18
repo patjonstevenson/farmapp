@@ -9,8 +9,10 @@ module.exports = async (req, res, next) => {
     getUserId({ email: decodedJwt.email })
         .then(response => {
             const { id } = response;
+            console.log("Response in validate-id-middleware:\n", response);
             console.log("ID from email: ", id);
-            console.log("req.params.id: ", Number(req.body.params.id));
+            console.log("req.body:\n", req.body);
+            // console.log("req.params.id: ", Number(req.body.params.id));
             // console.log("type of req.params.id: ", typeof Number(req.params.id));
             // console.log("Number. req.params.id: ", Number(req.params.id));
             console.log("id from db: ", id);
@@ -25,7 +27,7 @@ module.exports = async (req, res, next) => {
             }
         })
         .catch(error => {
-            console.log("\nERROR IN VALIDATE ID MIDDLEWARE\n");
+            console.log("\nERROR IN VALIDATE ID MIDDLEWARE\n", error);
             res.status(500).json({ message: 'Internal server error', error });
         });
 

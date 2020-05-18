@@ -1,5 +1,6 @@
-const db = require('../database/dbConfig');
+const db = require('../../database/dbConfig');
 const Pump = require('../pumps/pumps-model.js');
+const Strategy = require('../strategies/strategies-model.js');
 
 module.exports = {
     // Farms
@@ -63,7 +64,7 @@ function findFarmsBy(filter) {
 }
 
 // TODO
-function findFarmsByUser(user_id) {
+async function findFarmsByUser(user_id) {
     console.log(`Running findFarmsByUser for user_id: ${user_id}`);
     // return db('users as u')
     //     .join('farms as f', 'f.user_id', 'u.id')
@@ -71,7 +72,7 @@ function findFarmsByUser(user_id) {
     //     .select(
     //         'f.id as farm_id', 'f.name as farm_name', 'f.timezone'
     //     );
-    return db('farms as f')
+    return await db('farms as f')
         .where({ 'f.user_id': user_id })
         .select('*');
 }
@@ -83,10 +84,12 @@ async function getFarmInfoByUser(user_id) {
         const farms = await findFarmsByUser(user_id);
         // get pumps and valves DONE
         const pumps = await Pump.findPumpsByUser(user_id);
+        const valves = await Pump.findValvesByUser(user_id);
+        console.log("Pumps in model: ", pumps);
         // get strategies and tactics DONE
-        const strategies = await findStrategiesByUser(user_id);
+        const strategies = await Strategy.findStrategiesByUser(user_id);
         return ({
-            farms, pumps, strategies
+            farms, pumps, valves, strategies
         });
     } catch (error) {
         return { error };
@@ -141,13 +144,14 @@ function findPumpsByFarm(farm_id) {
         .join('pumps as p', 'p.farm_id', 'f.id')
         .where({ 'f.id': farm_id })
         .select(
-            'p'
+            'p.id as pump_id',
         );
 }
 
 
-function findPumpsByUser(user_id) {
-    return db('users as u')
+async function findPumpsByUser(user_id) {
+    console.log("\nRUNNING findPumpsByUser with user_id = ", user_id);
+    return await db('users as u')
         .join('farms as f', 'f.user_id', 'u.id')
         .join('pumps as p', 'p.farm_id', 'f.id')
         .join('valves as v', 'v.pump_id', 'v.id')

@@ -1,4 +1,4 @@
-const db = require('../database/dbConfig');
+const db = require('../../database/dbConfig');
 
 module.exports = {
     // Strategies
@@ -41,9 +41,9 @@ function findStrategyBy(filter) {
     return db('strategies').where(filter);
 }
 
-function findStrategiesByUser(user_id) {
+async function findStrategiesByUser(user_id) {
     // Returns list of strategies by user
-    return db('users as u')
+    return await db('users as u')
         .join('farms as f', 'f.user_id', 'u.id')
         .join('pumps as p', 'p.farm_id', 'f.id')
         .join('strategies as s', 's.id', 'p.strategy_id')

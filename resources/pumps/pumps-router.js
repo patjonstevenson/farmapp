@@ -1,4 +1,4 @@
-const Pump = require("../pumps/pumps-model");
+const Pump = require("./pumps-model");
 
 const idMiddleware = require('../users/validate-id-middleware');
 
@@ -90,9 +90,9 @@ router.delete('/:pump_id', idMiddleware, async (req, res) => {
 
 // VALVES
 router.get('/:pump_id/valves', idMiddleware, async (req, res) => {
-    const { farm_id } = req.params;
+    const { pump_id } = req.params;
     try {
-        const pumps = await Pump.findPumpsByFarm(farm_id);
+        const pumps = await Pump.findValvessBy({ pump_id });
         if (pumps.error) {
             res.status(500).json({ message: "Error processing pump data.", error: farms.error });
         } else {
@@ -104,9 +104,9 @@ router.get('/:pump_id/valves', idMiddleware, async (req, res) => {
     }
 });
 router.get('/:pump_id/valves/:valve_id', idMiddleware, async (req, res) => {
-    const { id, farm_id, pump_id } = req.params;
+    const { valve_id } = req.params;
     try {
-        const pump = await Pump.findPumpById(pump_id);
+        const pump = await Pump.findValveById(valve_id);
         if (pump.error) {
             res.status(500).json({ message: "Error processing pump data.", error: pump.error });
         } else {
@@ -118,18 +118,22 @@ router.get('/:pump_id/valves/:valve_id', idMiddleware, async (req, res) => {
     }
 });
 router.post('/:pump_id/valves', idMiddleware, async (req, res) => {
-    const { id, farm_id } = req.params;
-    const pump = req.body;
+    const { name, params } = req.body;
+    const { pump_id } = params;
+    console.log(`\nREQ.BODY:\n${req.body}\n`, req.body);
+    // const pump = req.body;
     try {
-        const new_id = await Pump.addPump({ ...pump, user_id: id, farm_id });
+        const [new_id] = await Pump.addValve({ name, pump_id });
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding pump.', error: new_id.error });
         } else {
-            const newPump = await Pump.findPumpById(new_id);
+            const newPump = await Pump.findValveById(new_id);
             res.status(200).json({ newPump });
         }
     } catch (error) {
-        console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
+        // console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
+        console.log("\n\nERROR in POST to /:id_pump_id/valves");
+        console.log("Error:\n", error);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

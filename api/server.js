@@ -11,14 +11,14 @@ const cors = require("cors");
 
 // Routers
 const authRouter = require("../auth/auth-router");
-const usersRouter = require("../users/users-router");
-const farmsRouter = require("../farms/farms-router");
-const pumpsRouter = require("../pumps/pumps-router.js");
-const strategiesRouter = require("../strategies/strategies-router");
+const usersRouter = require("../resources/users/users-router");
+const farmsRouter = require("../resources/farms/farms-router");
+const pumpsRouter = require("../resources/pumps/pumps-router.js");
+const strategiesRouter = require("../resources/strategies/strategies-router");
 
 // Custom Middleware
 const authMiddleware = require("../auth/authenticate-middleware");
-const idMiddleware = require("../users/validate-id-middleware");
+const idMiddleware = require("../resources/users/validate-id-middleware");
 
 const testMiddleware = require("./request-path-middleware");
 // Puts params in body
@@ -43,7 +43,7 @@ server.use("/api/auth", authRouter);
 server.use("/api/users/:id/farms/:farm_id/pumps/", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, pumpsRouter);
 server.use("/api/users/:id/farms", requestParamsMiddleware, testMiddleware, authMiddleware, idMiddleware, farmsRouter);
 server.use("/api/users/:id/strategies", requestParamsMiddleware, authMiddleware, idMiddleware, strategiesRouter)
-server.use("/api/users", authMiddleware, usersRouter);
+server.use("/api/users/:id", requestParamsMiddleware, authMiddleware, idMiddleware, usersRouter);
 
 // =============================================
 

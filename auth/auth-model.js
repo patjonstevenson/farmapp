@@ -2,7 +2,7 @@
 
 const db = require("../database/dbConfig");
 
-const users = require("../users/users-model");
+const users = require("../resources/users/users-model");
 
 async function add(user) {
     try {

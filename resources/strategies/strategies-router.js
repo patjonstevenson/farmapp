@@ -1,4 +1,4 @@
-const Strategy = require("../strategies/strategies-model");
+const Strategy = require("./strategies-model");
 
 const idMiddleware = require('../users/validate-id-middleware');
 
