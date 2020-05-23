@@ -41,19 +41,27 @@ function findStrategyBy(filter) {
     return db('strategies').where(filter);
 }
 
-async function findStrategiesByUser(user_id) {
+function findStrategiesByUser(user_id) {
     // Returns list of strategies by user
-    return await db('users as u')
-        .join('farms as f', 'f.user_id', 'u.id')
-        .join('pumps as p', 'p.farm_id', 'f.id')
-        .join('strategies as s', 's.id', 'p.strategy_id')
+    return db('strategies as s')
         .join('tactics as t', 't.strategy_id', 's.id')
-        .where({ 'u.id': user_id })
-        // .groupBy('stra')
+        .where({ 's.user_id': user_id })
         .select(
             's.id as strategy_id', 's.name as strategy_name', // strategy
-            't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
+            // 't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
         );
+
+    // return await db('users as u')
+    //     .join('farms as f', 'f.user_id', 'u.id')
+    //     .join('pumps as p', 'p.farm_id', 'f.id')
+    //     .join('strategies as s', 's.id', 'p.strategy_id')
+    //     .join('tactics as t', 't.strategy_id', 's.id')
+    //     .where({ 'u.id': user_id })
+    //     // .groupBy('stra')
+    //     .select(
+    //         's.id as strategy_id', 's.name as strategy_name', // strategy
+    //         't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
+    //     );
 }
 
 function findStrategiesByFarm(farm_id) {
