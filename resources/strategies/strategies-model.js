@@ -14,7 +14,8 @@ module.exports = {
     updateTactic,
     deleteTactic,
     findTacticBy,
-    findTacticById
+    findTacticById,
+    findTacticsByUser
 };
 
 
@@ -44,12 +45,12 @@ function findStrategyBy(filter) {
 function findStrategiesByUser(user_id) {
     // Returns list of strategies by user
     return db('strategies as s')
-        .join('tactics as t', 't.strategy_id', 's.id')
-        .where({ 's.user_id': user_id })
-        .select(
-            's.id as strategy_id', 's.name as strategy_name', // strategy
-            // 't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
-        );
+        // .join('tactics as t', 't.strategy_id', 's.id')
+        .where({ 's.user_id': user_id });
+    // .select(
+    //     's.id as strategy_id', 's.name as strategy_name' // strategy
+    //     // 't.id as tactic_id', 't.time', 't.humidity_high', 't.dryback' // tactics
+    // );
 
     // return await db('users as u')
     //     .join('farms as f', 'f.user_id', 'u.id')
@@ -97,6 +98,10 @@ function findTacticBy(filter) {
 
 function findTacticById(id) {
     return db('tactics').where({ id }).first();
+}
+
+function findTacticsByUser(user_id) {
+    return db('tactics').where({ user_id });
 }
 
 // TODO: assign strategy to pump (could just do using update pump)

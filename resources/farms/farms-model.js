@@ -80,16 +80,13 @@ async function findFarmsByUser(user_id) {
 // TODO
 async function getFarmInfoByUser(user_id) {
     try {
-        // get farms DONE
         const farms = await findFarmsByUser(user_id);
-        // get pumps and valves DONE
         const pumps = await Pump.findPumpsByUser(user_id);
         const valves = await Pump.findValvesByUser(user_id);
-        console.log("Pumps in model: ", pumps);
-        // get strategies and tactics DONE
         const strategies = await Strategy.findStrategiesByUser(user_id);
+        const tactics = await Strategy.findTacticsByUser(user_id);
         return ({
-            farms, pumps, valves, strategies
+            farms, pumps, valves, strategies, tactics
         });
     } catch (error) {
         return { error };
