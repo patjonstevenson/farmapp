@@ -1,6 +1,6 @@
 const Pump = require("./pumps-model");
 
-const idMiddleware = require('../users/validate-id-middleware');
+const idMiddleware = require('../../api/validate-id-middleware');
 
 const router = require('express').Router();
 
@@ -41,8 +41,9 @@ router.post('/', idMiddleware, async (req, res) => {
     const { id, farm_id } = req.body.params;
     const pump = req.body;
     console.log("\nREQ BODY: ", req.body);
+    console.log("User ID in POST pump: ", id);
     try {
-        const [new_id] = await Pump.addPump({ name: pump.name, farm_id });
+        const [new_id] = await Pump.addPump({ name: pump.name, farm_id, user_id: id });
         console.log("\nPUMP CREATION SUCCESS\nnew_id: ", new_id);
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding pump.', error: new_id.error });
@@ -57,7 +58,8 @@ router.post('/', idMiddleware, async (req, res) => {
 });
 router.put('/:pump_id', idMiddleware, async (req, res) => {
     const { pump_id } = req.params;
-    const changes = req.body;
+    const { params, ...changes } = req.body;
+    console.log("CHANGES: ", changes);
     try {
         const num_changed = await Pump.updatePump(changes, pump_id);
         if (num_changed.error || num_changed == 0) {
@@ -119,7 +121,8 @@ router.get('/:pump_id/valves/:valve_id', idMiddleware, async (req, res) => {
 });
 router.post('/:pump_id/valves', idMiddleware, async (req, res) => {
     const { name, params } = req.body;
-    const { pump_id } = params;
+    const { pump_id, id } = params;
+    console.log("User ID in POST valve: ", id);
     console.log(`\nREQ.BODY:\n${req.body}\n`, req.body);
     // const pump = req.body;
     try {

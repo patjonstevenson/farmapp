@@ -1,6 +1,6 @@
 const Strategy = require("./strategies-model");
 
-const idMiddleware = require('../users/validate-id-middleware');
+const idMiddleware = require('../../api/validate-id-middleware');
 
 const router = require('express').Router();
 

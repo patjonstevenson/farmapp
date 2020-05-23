@@ -56,11 +56,11 @@ function findPumpsByUser(user_id) {
     return db('farms as f')
         .join('pumps as p', 'p.farm_id', 'f.id')
         // .join('valves as v', 'v.pump_id', 'v.id')
-        .where({ 'f.user_id': user_id })
-        .select(
-            'p.id as pump_id', 'p.name as pump_name', 'p.farm_id', 'p.strategy_id', // pump
-            // 'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as v_pump_id' // valve
-        );
+        .where({ 'f.user_id': user_id });
+    // .select(
+    //     'p.id as pump_id', 'p.name as pump_name', 'p.farm_id', 'p.strategy_id', // pump
+    //     // 'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as v_pump_id' // valve
+    // );
 }
 
 // VALVES
