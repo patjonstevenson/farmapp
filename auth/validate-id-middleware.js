@@ -16,8 +16,9 @@ module.exports = async (req, res, next) => {
             // console.log("type of req.params.id: ", typeof Number(req.params.id));
             // console.log("Number. req.params.id: ", Number(req.params.id));
             console.log("id from db: ", id);
-            console.log("EQUAL? ", id === Number(req.body.params.id));
-            if (Number(req.body.params.id) === id) {
+            console.log("id from params: ", req.params);
+            console.log("EQUAL? ", id === Number(req.params.user_id));
+            if (Number(req.params.user_id) === id) {
                 console.log("Valid");
                 next();
             } else {

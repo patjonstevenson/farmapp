@@ -1,14 +1,14 @@
 const Pump = require("./pumps-model");
 
-const idMiddleware = require('../../api/validate-id-middleware');
+const idMiddleware = require('../../auth/validate-id-middleware');
 
 const router = require('express').Router();
 
 // PUMPS
 router.get('/', async (req, res) => {
-    const { farm_id } = req.body.params;
+    const { farm_id } = req.params;
     console.log("FARM ID: ", farm_id);
-    console.log("req.body: ", req.body);
+    console.log("req.params: ", req.params);
     console.log("\nInside pumps-router.js handler for GET to /:id/farms/:farm_id/pumps\n")
     try {
         const pumps = await Pump.findPumpsByFarm(farm_id);
@@ -19,12 +19,12 @@ router.get('/', async (req, res) => {
             res.status(200).json({ pumps });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.body.params.id}/farms/${farm_id}/pumps\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.get('/:pump_id', idMiddleware, async (req, res) => {
-    const { id, farm_id, pump_id } = req.body.params;
+    const { id, farm_id, pump_id } = req.params;
     try {
         const pump = await Pump.findPumpById(pump_id);
         if (pump.error) {
@@ -38,7 +38,7 @@ router.get('/:pump_id', idMiddleware, async (req, res) => {
     }
 });
 router.post('/', idMiddleware, async (req, res) => {
-    const { id, farm_id } = req.body.params;
+    const { id, farm_id } = req.params;
     const pump = req.body;
     console.log("\nREQ BODY: ", req.body);
     console.log("User ID in POST pump: ", id);
@@ -58,7 +58,7 @@ router.post('/', idMiddleware, async (req, res) => {
 });
 router.put('/:pump_id', idMiddleware, async (req, res) => {
     const { pump_id } = req.params;
-    const { params, ...changes } = req.body;
+    const { params, changes } = req.body;
     console.log("CHANGES: ", changes);
     try {
         const num_changed = await Pump.updatePump(changes, pump_id);

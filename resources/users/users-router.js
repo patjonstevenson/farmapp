@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const idMiddleware = require('../../api/validate-id-middleware');
+const idMiddleware = require('../../auth/validate-id-middleware');
 
 const User = require('./users-model');
 const Farm = require('../farms/farms-model');

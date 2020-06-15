@@ -3,7 +3,7 @@ const Pump = require('../pumps/pumps-model');
 const helpers = require('./farms-helpers');
 
 const router = require('express').Router();
-const idMiddleware = require('../../api/validate-id-middleware');
+const idMiddleware = require('../../auth/validate-id-middleware');
 
 router.get('/', async (req, res) => {
     // const { id } = req.params;

@@ -42,14 +42,15 @@ function findPumpBy(filter) {
 
 // TODO
 function findPumpsByFarm(farm_id) {
-    return db('farms as f')
-        .join('pumps as p', 'p.farm_id', 'f.id')
-        // .join('valves as v', 'v.pump_id', 'v.id')
-        .where({ 'f.id': farm_id })
-        .select(
-            'p.id as pump_id', 'p.name', 'p.strategy_id', 'p.farm_id'//, // Pump
-            // 'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as v_pump_id' // valve
-        );
+    return db('pumps').where({ farm_id });
+    // return db('farms as f')
+    //     .join('pumps as p', 'p.farm_id', 'f.id')
+    //     // .join('valves as v', 'v.pump_id', 'v.id')
+    //     .where({ 'f.id': farm_id })
+    //     .select(
+    //         'p.id as pump_id', 'p.name', 'p.strategy_id', 'p.farm_id'//, // Pump
+    //         // 'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as v_pump_id' // valve
+    //     );
 }
 
 function findPumpsByUser(user_id) {
