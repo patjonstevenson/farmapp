@@ -48,6 +48,15 @@ server.use("/api/users/:user_id/farms", requestParamsMiddleware, testMiddleware,
 server.use("/api/users/:user_id/strategies", requestParamsMiddleware, authMiddleware, idMiddleware, strategiesRouter)
 server.use("/api/users/:user_id", requestParamsMiddleware, authMiddleware, idMiddleware, usersRouter);
 
+/*
+    URL => Router
+    -------------
+    /api/users/ => usersRouter
+    /api/pumps/ => pumpsRouter
+    /api/farms/ => farmRouter
+    /api/strategies/ => strategiesRouter
+*/
+
 // =============================================
 
 // Sanity Check
