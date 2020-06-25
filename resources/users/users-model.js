@@ -4,7 +4,7 @@ const Pump = require('../pumps/pumps-model');
 const Strategy = require('../strategies/strategies-model');
 
 
-     function fetchUserResources(user_id) {
+function fetchUserResources(user_id) {
     try {
         const farms = Farm.findFarmsByUser(user_id);
         const pumps = Pump.findPumpsByUser(user_id);
