@@ -1,79 +1,79 @@
 const router = require('express').Router();
 const Tactic = require('./tactics-model');
 
-router.get('/', async (req, res) => {
+router.get('/byUserId/:id', async (req, res) => {
     const { id } = req.body.params;
     try {
-        const strategies = await Strategy.findStrategiesByUser(id);
-        if (strategies.error) {
-            res.status(500).json({ message: "Error processing pump data.", error: strategies.error });
+        const tactics = await Tactic.findTacticsByUser(id);
+        if (tactics.error) {
+            res.status(500).json({ message: "Error processing pump data.", error: tactics.error });
         } else {
-            console.log("Strategies in strategies router:\n", strategies);
-            res.status(200).json({ strategies });
+            console.log("Tactics in tactics router:\n", tactics);
+            res.status(200).json({ tactics });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${id}/strategies\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${id}/tactics\n${error}`);
         res.status(500).json({ message: "Internal server error.", error });
     }
 });
-router.get('/:strategy_id', async (req, res) => {
-    const { strategy_id } = req.params;
+router.get('/:tactic_id', async (req, res) => {
+    const { tactic_id } = req.params;
     try {
-        const strategy = await Strategy.findStrategyById(strategy_id);
-        if (strategy.error) {
-            res.status(500).json({ message: "Error processing strategy data.", error: strategy.error });
+        const tactic = await Tactic.findTacticById(tactic_id);
+        if (tactic.error) {
+            res.status(500).json({ message: "Error processing tactic data.", error: tactic.error });
         } else {
-            res.status(200).json({ strategy });
+            res.status(200).json({ tactic });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/strategies/${strategy_id}\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/tactics/${tactic_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.post('/', async (req, res) => {
-    const { params, id, ...strategy } = req.body;
-    console.log("\nSTRATEGY (from req.body):\n", strategy);
+    const { params, id, ...tactic } = req.body;
+    console.log("\nTACTIC (from req.body):\n", tactic);
     try {
-        const [new_id] = await Strategy.addStrategy({ user_id: id, ...strategy });
+        const [new_id] = await Tactic.addTactic({ user_id: id, ...tactic });
         if (new_id.error) {
-            res.status(400).json({ message: 'Error adding strategy.', error: new_id.error });
+            res.status(400).json({ message: 'Error adding tactic.', error: new_id.error });
         } else {
-            const newStrategy = await Strategy.findStrategyById(new_id);
-            res.status(200).json({ newStrategy });
+            const newTactic = await Tactic.findTacticById(new_id);
+            res.status(200).json({ newTactic });
         }
     } catch (error) {
-        console.log(`\n\nERROR in POST to /users/${req.body.params.id}/strategies\n${error}`);
+        console.log(`\n\nERROR in POST to /users/${req.body.params.id}/tactics\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.put('/:strategy_id', async (req, res) => {
-    const { strategy_id } = req.params;
+router.put('/:tactic_id', async (req, res) => {
+    const { tactic_id } = req.params;
     const changes = req.body;
     try {
-        const num_changed = await Strategy.updateStrategy(changes, strategy_id);
+        const num_changed = await Tactic.updateTactic(changes, tactic_id);
         if (num_changed.error || num_changed == 0) {
-            res.status(400).json({ message: 'Error updating strategy.', error: num_changed });
+            res.status(400).json({ message: 'Error updating tactic.', error: num_changed });
         } else {
-            const updatedStrategy = await Strategy.findStrategyById(strategy_id);
-            res.status(200).json({ updatedStrategy });
+            const updatedTactic = await Tactic.findTacticById(tactic_id);
+            res.status(200).json({ updatedTactic });
         }
     } catch (error) {
-        console.log(`\n\nERROR in PUT to /users/${req.params.id}/strategies/${strategy_id}\n${error}`);
+        console.log(`\n\nERROR in PUT to /users/${req.params.id}/tactics/${tactic_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.delete('/:strategy_id', async (req, res) => {
-    const { strategy_id } = req.params;
+router.delete('/:tactic_id', async (req, res) => {
+    const { tactic_id } = req.params;
     try {
-        const deleted = await Strategy.deleteStrategy(strategy_id);
+        const deleted = await Tactic.deleteTactic(tactic_id);
         if (deleted.error) {
-            res.status(400).json({ message: 'Error deleting strategy.', error: deleted.error });
+            res.status(400).json({ message: 'Error deleting tactic.', error: deleted.error });
         } else {
-            // const updatedFarm = await Strategy.findFarmsBy({ id: farm_id });
+            // const updatedFarm = await Tactic.findFarmsBy({ id: farm_id });
             res.status(200).json({ deleted });
         }
     } catch (error) {
-        console.log(`\n\nERROR in DELETE to /users/${req.params.id}/strategies/${strategy_id}\n${error}`);
+        console.log(`\n\nERROR in DELETE to /users/${req.params.id}/tactics/${tactic_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
