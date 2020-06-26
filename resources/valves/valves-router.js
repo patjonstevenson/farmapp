@@ -1,5 +1,5 @@
 const Valve = require("./valves-model");
-const router = require("express").router();
+const router = require("express").Router();
 const idMiddleware = require('../../auth/validate-id-middleware');
 
 router.get('/', idMiddleware, async (req, res) => {
@@ -82,3 +82,5 @@ router.delete('/:valve_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
+
+module.exports = router;

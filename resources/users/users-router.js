@@ -9,8 +9,9 @@ const Farm = require('../farms/farms-model');
 const farmHelpers = require('../farms/farms-helpers');
 
 // USER
-router.get('/', async (req, res) => {
-    const { id } = req.body.params;
+router.get('/:id', async (req, res) => {
+    console.log("req.params in users-router for get to /:id:\n", req.params);
+    const { id } = req.params;
     try {
         // const userInfo = await User.findById(id);
         const data = await User.fetchUserResources(id);

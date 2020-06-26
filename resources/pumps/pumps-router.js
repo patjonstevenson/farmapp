@@ -1,5 +1,5 @@
 const Pump = require("./pumps-model");
-
+const Valve = require("../valves/valves-model");
 const idMiddleware = require('../../auth/validate-id-middleware');
 
 const router = require('express').Router();
@@ -87,9 +87,5 @@ router.delete('/:pump_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-
-
-
-
 
 module.exports = router;

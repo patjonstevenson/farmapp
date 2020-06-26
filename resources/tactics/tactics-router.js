@@ -1,8 +1,5 @@
-const Strategy = require("./strategies-model");
-
-const idMiddleware = require('../../auth/validate-id-middleware');
-
 const router = require('express').Router();
+const Tactic = require('./tactics-model');
 
 router.get('/', async (req, res) => {
     const { id } = req.body.params;
@@ -80,5 +77,6 @@ router.delete('/:strategy_id', async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
+
 
 module.exports = router;

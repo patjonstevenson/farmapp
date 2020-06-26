@@ -1,6 +1,6 @@
 const db = require('../../database/dbConfig');
 
-export default {
+module.exports = {
     addValve,
     updateValve,
     deleteValve,

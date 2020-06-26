@@ -64,7 +64,7 @@ server.use("/api/farms", farmsRouter);
 server.use("/api/pumps", pumpsRouter);
 server.use("/api/valves", valvesRouter);
 server.use("/api/strategies", strategiesRouter);
-
+// server.use("/api/tactics", tacticsRouter);
 
 // =============================================
 
