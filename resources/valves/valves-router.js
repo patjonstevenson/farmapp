@@ -2,83 +2,108 @@ const Valve = require("./valves-model");
 const router = require("express").Router();
 const idMiddleware = require('../../auth/validate-id-middleware');
 
-router.get('/', idMiddleware, async (req, res) => {
+router.get('/byUserId/:user_id', idMiddleware, async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const valves = await Valve.findValvesByUser({ user_id });
+        if (valves.error) {
+            res.status(500).json({ message: "Error processing valve data.", error: farms.error });
+        } else {
+            res.status(200).json({ valves });
+        }
+    } catch (error) {
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
+        res.status(500).json({ message: "Internal server error.", error: error });
+    }
+});
+
+router.get('/byPumpId/:pump_id', /*idMiddleware,*/ async (req, res) => {
     const { pump_id } = req.params;
     try {
-        const pumps = await Valve.findValvessBy({ pump_id });
-        if (pumps.error) {
-            res.status(500).json({ message: "Error processing pump data.", error: farms.error });
+        const valves = await Valve.findValvesBy({ pump_id });
+        if (valves.error) {
+            res.status(500).json({ message: "Error processing valve data.", error: farms.error });
         } else {
-            res.status(200).json({ pumps });
+            res.status(200).json({ valves });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.get('/:valve_id', idMiddleware, async (req, res) => {
+
+router.get('/:valve_id', /*idMiddleware,*/ async (req, res) => {
     const { valve_id } = req.params;
     try {
-        const pump = await Valve.findValveById(valve_id);
-        if (pump.error) {
-            res.status(500).json({ message: "Error processing pump data.", error: pump.error });
+        const valve = await Valve.findValveById(valve_id);
+        if (valve.error) {
+            res.status(500).json({ message: "Error processing valve data.", error: valve.error });
         } else {
-            res.status(200).json({ pump });
+            res.status(200).json({ valve });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${req.params.farm_id}/pumps/${pump_id}\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.post('/', idMiddleware, async (req, res) => {
-    const { name, params } = req.body;
-    const { pump_id, id } = params;
-    console.log("User ID in POST valve: ", id);
+router.post('/', /*idMiddleware,*/ async (req, res) => {
+    const valve = req.body;
+    if (!valve.user_id) {
+        req.status(400).json({ message: "user_id required for POST to /api/valves" });
+    }
+    if (!valve.farm_id) {
+        req.status(400).json({ message: "farm_id required for POST to /api/valves" });
+    }
+    if (!valve.pump_id) {
+        req.status(400).json({ message: "pump_id required for POST to /api/valves" });
+    }
+    // const { valve_id, id } = params;
+    // console.log("User ID in POST valve: ", id);
     console.log(`\nREQ.BODY:\n${req.body}\n`, req.body);
-    // const pump = req.body;
+    // const valve = req.body;
     try {
-        const [new_id] = await Valve.addValve({ name, pump_id });
+        const [new_id] = await Valve.addValve(valve);
         if (new_id.error) {
-            res.status(400).json({ message: 'Error adding pump.', error: new_id.error });
+            res.status(400).json({ message: 'Error adding valve.', error: new_id.error });
         } else {
             const newValve = await Valve.findValveById(new_id);
             res.status(200).json({ newValve });
         }
     } catch (error) {
-        // console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
-        console.log("\n\nERROR in POST to /:id_pump_id/valves");
+        // console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
+        console.log("\n\nERROR in POST to /:id_valve_id/valves");
         console.log("Error:\n", error);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.put('/:valve_id', idMiddleware, async (req, res) => {
-    const { pump_id } = req.params;
+router.put('/:valve_id', /*idMiddleware,*/ async (req, res) => {
+    const { valve_id } = req.params;
     const changes = req.body;
     try {
-        const num_changed = await Valve.updateValve(changes, pump_id);
+        const num_changed = await Valve.updateValve(changes, valve_id);
         if (num_changed.error || num_changed == 0) {
-            res.status(400).json({ message: 'Error updating pump.', error: num_changed });
+            res.status(400).json({ message: 'Error updating valve.', error: num_changed });
         } else {
-            const updatedValve = await Valve.findValveById(pump_id);
+            const updatedValve = await Valve.findValveById(valve_id);
             res.status(200).json({ updatedValve });
         }
     } catch (error) {
-        console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}/pumps/${pump_id}\n${error}`);
+        console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.delete('/:valve_id', idMiddleware, async (req, res) => {
-    const { pump_id } = req.params;
+router.delete('/:valve_id', /*idMiddleware,*/ async (req, res) => {
+    const { valve_id } = req.params;
     try {
-        const deleted = await Valve.deleteValve(pump_id);
+        const deleted = await Valve.deleteValve(valve_id);
         if (deleted.error) {
-            res.status(400).json({ message: 'Error deleting pump.', error: deleted.error });
+            res.status(400).json({ message: 'Error deleting valve.', error: deleted.error });
         } else {
             // const updatedFarm = await Valve.findFarmsBy({ id: farm_id });
             res.status(200).json({ deleted });
         }
     } catch (error) {
-        console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}/pumps/${pump_id}\n${error}`);
+        console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

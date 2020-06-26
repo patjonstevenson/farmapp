@@ -1,16 +1,14 @@
 const Pump = require("./pumps-model");
-const Valve = require("../valves/valves-model");
 const idMiddleware = require('../../auth/validate-id-middleware');
-
 const router = require('express').Router();
 
-router.get('/', async (req, res) => {
-    const { farm_id } = req.params;
-    console.log("FARM ID: ", farm_id);
-    console.log("req.params: ", req.params);
-    console.log("\nInside pumps-router.js handler for GET to /:id/farms/:farm_id/pumps\n")
+router.get('/byUserId/:user_id', async (req, res) => {
+    const { user_id } = req.params;
+    // console.log("FARM ID: ", farm_id);
+    // console.log("req.params: ", req.params);
+    // console.log("\nInside pumps-router.js handler for GET to /:id/farms/:farm_id/pumps\n")
     try {
-        const pumps = await Pump.findPumpsByFarm(farm_id);
+        const pumps = await Pump.findPumpsByUser(user_id);
         console.log("PUMPS: ", pumps);
         if (pumps.error) {
             res.status(500).json({ message: "Error processing pump data.", error: farms.error });
@@ -22,7 +20,27 @@ router.get('/', async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.get('/:pump_id', idMiddleware, async (req, res) => {
+
+router.get('/byFarmId/:farm_id', async (req, res) => {
+    const { farm_id } = req.params;
+    // console.log("FARM ID: ", farm_id);
+    // console.log("req.params: ", req.params);
+    // console.log("\nInside pumps-router.js handler for GET to /:id/farms/:farm_id/pumps\n")
+    try {
+        const pumps = await Pump.findPumpsBy({ farm_id });
+        console.log("PUMPS: ", pumps);
+        if (pumps.error) {
+            res.status(500).json({ message: "Error processing pump data.", error: farms.error });
+        } else {
+            res.status(200).json({ pumps });
+        }
+    } catch (error) {
+        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/pumps\n${error}`);
+        res.status(500).json({ message: "Internal server error.", error: error });
+    }
+});
+
+router.get('/:pump_id', /*idMiddleware,*/ async (req, res) => {
     const { id, farm_id, pump_id } = req.params;
     try {
         const pump = await Pump.findPumpById(pump_id);
@@ -36,11 +54,16 @@ router.get('/:pump_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.post('/', idMiddleware, async (req, res) => {
-    const { id, farm_id } = req.params;
+router.post('/', /*idMiddleware,*/ async (req, res) => {
     const pump = req.body;
+    if (!valve.user_id) {
+        req.status(400).json({ message: "user_id required for POST to /api/valves" });
+    }
+    if (!valve.farm_id) {
+        req.status(400).json({ message: "farm_id required for POST to /api/valves" });
+    }
     console.log("\nREQ BODY: ", req.body);
-    console.log("User ID in POST pump: ", id);
+    // console.log("User ID in POST pump: ", id);
     try {
         const [new_id] = await Pump.addPump({ name: pump.name, farm_id, user_id: id });
         console.log("\nPUMP CREATION SUCCESS\nnew_id: ", new_id);
@@ -55,7 +78,7 @@ router.post('/', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.put('/:pump_id', idMiddleware, async (req, res) => {
+router.put('/:pump_id', /*idMiddleware,*/ async (req, res) => {
     const { pump_id } = req.params;
     const { params, changes } = req.body;
     console.log("CHANGES: ", changes);
@@ -72,7 +95,7 @@ router.put('/:pump_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.delete('/:pump_id', idMiddleware, async (req, res) => {
+router.delete('/:pump_id', /*idMiddleware,*/ async (req, res) => {
     const { pump_id } = req.params;
     try {
         const deleted = await Pump.deletePump(pump_id);

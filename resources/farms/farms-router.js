@@ -38,7 +38,7 @@ router.get('/byUserId/:user_id', async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.get('/:farm_id', idMiddleware, async (req, res) => {
+router.get('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     const { farm_id } = req.params;
     try {
         const farms = await Farm.findFarmsBy({ id: farm_id });
@@ -54,9 +54,12 @@ router.get('/:farm_id', idMiddleware, async (req, res) => {
 });
 router.post('/', async (req, res) => {
     // const { id } = req.params;
-    const { id, ...farm } = req.body;
+    const farm = req.body;
+    if (!farm.user_id) {
+        req.status(400).json({ message: "user_id required for POST to /api/farms" });
+    }
     try {
-        const new_id = await Farm.addFarm({ ...farm, user_id: id });
+        const new_id = await Farm.addFarm(farm);
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding farm.', error: new_id.error });
         } else {
@@ -72,7 +75,7 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.put('/:farm_id', idMiddleware, async (req, res) => {
+router.put('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     const { farm_id } = req.params;
     const changes = req.body;
     try {
@@ -88,7 +91,7 @@ router.put('/:farm_id', idMiddleware, async (req, res) => {
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
-router.delete('/:farm_id', idMiddleware, async (req, res) => {
+router.delete('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     const { farm_id } = req.params;
     try {
         const deleted = await Farm.deleteFarm(farm_id);

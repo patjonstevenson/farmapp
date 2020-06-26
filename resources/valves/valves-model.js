@@ -29,13 +29,14 @@ function findValvesBy(filter) {
 }
 
 function findValvesByUser(user_id) {
-    return db('farms as f')
-        .join('pumps as p', 'f.id', 'p.farm_id')
-        .join('valves as v', 'p.id', 'v.pump_id')
-        .where({ 'f.user_id': user_id })
-        .select(
-            'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as pump_id'
-        );
+    return db('valves as v').where({ user_id });
+    // return db('farms as f')
+    //     .join('pumps as p', 'f.id', 'p.farm_id')
+    //     .join('valves as v', 'p.id', 'v.pump_id')
+    //     .where({ 'f.user_id': user_id })
+    //     .select(
+    //         'v.id as valve_id', 'v.name as valve_name', 'v.pump_id as pump_id'
+    //     );
 }
 
 function findValvesByFarm(farm_id) {
