@@ -12,7 +12,7 @@ router.get('/byUserId/:user_id', idMiddleware, async (req, res) => {
             return res.status(200).json({ valves });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
+        console.log(`\n\nERROR in GET to /valves/byUserId/${user_id}\n${error}`);
         return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
@@ -36,13 +36,17 @@ router.get('/:valve_id', /*idMiddleware,*/ async (req, res) => {
     const { valve_id } = req.params;
     try {
         const valve = await Valve.findValveById(valve_id);
+        console.log("VALVE: ", valve);
+        if (!valve) {
+            return res.status(404).json({ message: `Could not find valve with id ${valve_id}` });
+        }
         if (valve.error) {
             return res.status(500).json({ message: "Error processing valve data.", error: valve.error });
         } else {
             return res.status(200).json({ valve });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
+        console.log(`\n\nERROR in GET to /valves/${valve_id}\n${error}`);
         return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
