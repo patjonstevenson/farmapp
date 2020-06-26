@@ -31,10 +31,13 @@ router.get('/:tactic_id', async (req, res) => {
     }
 });
 router.post('/', async (req, res) => {
-    const { params, id, ...tactic } = req.body;
+    const tactic = req.body;
+    if (!tactic.user_id) {
+        req.status(400).json({ message: "user_id required for POST to /api/tactics" });
+    }
     console.log("\nTACTIC (from req.body):\n", tactic);
     try {
-        const [new_id] = await Tactic.addTactic({ user_id: id, ...tactic });
+        const [new_id] = await Tactic.addTactic(tactic);
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding tactic.', error: new_id.error });
         } else {

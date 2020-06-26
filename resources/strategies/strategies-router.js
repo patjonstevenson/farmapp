@@ -4,8 +4,8 @@ const idMiddleware = require('../../auth/validate-id-middleware');
 
 const router = require('express').Router();
 
-router.get('/', async (req, res) => {
-    const { id } = req.body.params;
+router.get('/byUserId/:id', async (req, res) => {
+    const { id } = req.params;
     try {
         const strategies = await Strategy.findStrategiesByUser(id);
         if (strategies.error) {
@@ -34,10 +34,13 @@ router.get('/:strategy_id', async (req, res) => {
     }
 });
 router.post('/', async (req, res) => {
-    const { params, id, ...strategy } = req.body;
+    const strategy = req.body;
+    if (!strategy.user_id) {
+        req.status(400).json({ message: "user_id required for POST to /api/strategy" });
+    }
     console.log("\nSTRATEGY (from req.body):\n", strategy);
     try {
-        const [new_id] = await Strategy.addStrategy({ user_id: id, ...strategy });
+        const [new_id] = await Strategy.addStrategy(strategy);
         if (new_id.error) {
             res.status(400).json({ message: 'Error adding strategy.', error: new_id.error });
         } else {
