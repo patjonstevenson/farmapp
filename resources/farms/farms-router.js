@@ -4,6 +4,7 @@ const helpers = require('./farms-helpers');
 
 const router = require('express').Router();
 const idMiddleware = require('../../auth/validate-id-middleware');
+const { response } = require('../../api/server');
 
 router.get('/byUserId/:user_id', async (req, res) => {
     // const { id } = req.params;
@@ -27,15 +28,15 @@ router.get('/byUserId/:user_id', async (req, res) => {
         }
 
         if (farms.error) {
-            res.status(500).json({ message: "Error processing farm data.", error: farms.error });
+            return res.status(500).json({ message: "Error processing farm data.", error: farms.error });
         } else {
             console.log(farms);
-            res.status(200).json({ farms });
+            return res.status(200).json({ farms });
         }
     } catch (error) {
         console.log(error);
         console.log(`\n\nERROR in GET to /farms/byUserId/${user_id}\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.get('/:farm_id', /*idMiddleware,*/ async (req, res) => {
@@ -43,36 +44,36 @@ router.get('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     try {
         const farms = await Farm.findFarmsBy({ id: farm_id });
         if (farms.error) {
-            res.status(500).json({ message: "Error processing farm data.", error: farms.error });
+            return res.status(500).json({ message: "Error processing farm data.", error: farms.error });
         } else {
-            res.status(200).json({ farms });
+            return res.status(200).json({ farms });
         }
     } catch (error) {
         console.log(`\n\nERROR in GET to /users/${req.params.id}/farms/${req.params.farm_id}\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.post('/', async (req, res) => {
     // const { id } = req.params;
     const farm = req.body;
     if (!farm.user_id) {
-        req.status(400).json({ message: "user_id required for POST to /api/farms" });
+        return res.status(400).json({ message: "user_id required for POST to /api/farms" });
     }
     try {
         const new_id = await Farm.addFarm(farm);
         if (new_id.error) {
-            res.status(400).json({ message: 'Error adding farm.', error: new_id.error });
+            return res.status(400).json({ message: 'Error adding farm.', error: new_id.error });
         } else {
             console.log("Made it to else (no error from Farm.addFarm)");
             console.log(`typeof 8: ${typeof 8}`)
             console.log(`Type of new_id: ${typeof Number(new_id)}`);
             console.log(`new_id =  ${new_id}`);
             const newFarm = await Farm.findFarmsBy({ id: Number(new_id) });
-            res.status(200).json({ newFarm });
+            return res.status(200).json({ newFarm });
         }
     } catch (error) {
         console.log(`\n\nERROR in POST to /users/${id}/farms\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.put('/:farm_id', /*idMiddleware,*/ async (req, res) => {
@@ -81,14 +82,14 @@ router.put('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     try {
         const num_changed = await Farm.updateFarm(changes, farm_id);
         if (num_changed.error || num_changed == 0) {
-            res.status(400).json({ message: 'Error updating farm.', error: num_changed });
+            return res.status(400).json({ message: 'Error updating farm.', error: num_changed });
         } else {
             const updatedFarm = await Farm.findFarmsBy({ id: farm_id });
-            res.status(200).json({ updatedFarm });
+            return res.status(200).json({ updatedFarm });
         }
     } catch (error) {
         console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 router.delete('/:farm_id', /*idMiddleware,*/ async (req, res) => {
@@ -96,14 +97,14 @@ router.delete('/:farm_id', /*idMiddleware,*/ async (req, res) => {
     try {
         const deleted = await Farm.deleteFarm(farm_id);
         if (deleted.error) {
-            res.status(400).json({ message: 'Error deleting farm.', error: deleted.error });
+            return res.status(400).json({ message: 'Error deleting farm.', error: deleted.error });
         } else {
             // const updatedFarm = await Farm.findFarmsBy({ id: farm_id });
-            res.status(200).json({ deleted });
+            return res.status(200).json({ deleted });
         }
     } catch (error) {
         console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}\n${error}`);
-        res.status(500).json({ message: "Internal server error.", error: error });
+        return res.status(500).json({ message: "Internal server error.", error: error });
     }
 });
 
