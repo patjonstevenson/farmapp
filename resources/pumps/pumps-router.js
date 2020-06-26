@@ -4,7 +4,6 @@ const idMiddleware = require('../../auth/validate-id-middleware');
 
 const router = require('express').Router();
 
-// PUMPS
 router.get('/', async (req, res) => {
     const { farm_id } = req.params;
     console.log("FARM ID: ", farm_id);

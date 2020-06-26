@@ -13,7 +13,8 @@ const cors = require("cors");
 const authRouter = require("../auth/auth-router");
 const usersRouter = require("../resources/users/users-router");
 const farmsRouter = require("../resources/farms/farms-router");
-const pumpsRouter = require("../resources/pumps/pumps-router.js");
+const pumpsRouter = require("../resources/pumps/pumps-router");
+const valvesRouter = require("../resources/valves/valves-router");
 const strategiesRouter = require("../resources/strategies/strategies-router");
 
 // Custom Middleware
@@ -37,9 +38,6 @@ server.use(cors());
 server.use(express.json());
 // server.use(requestParamsMiddleware);
 
-// Assignment of routers and middleware to routes
-server.use("/api/auth", authRouter);
-
 // Going to get rid of requestParamsMiddleware (bc stupid),
 // so I will need to change anywhere that gets an id from req.body.params
 // Also need to change, I think idMiddleware, to not put id in req.body
@@ -59,10 +57,12 @@ server.use("/api/auth", authRouter);
     /api/strategies/ => strategiesRouter
 */
 
-server.use("/api/", authRouter);
+// ROUTES
+server.use("/api/auth", authRouter);
 server.use("/api/users", usersRouter);
 server.use("/api/farms", farmsRouter);
 server.use("/api/pumps", pumpsRouter);
+server.use("/api/valves", valvesRouter);
 server.use("/api/strategies", strategiesRouter);
 
 
