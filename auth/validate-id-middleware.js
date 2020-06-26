@@ -23,7 +23,7 @@ module.exports = async (req, res, next) => {
                 next();
             } else {
                 console.log("Invalid");
-                res.status(401).json({ message: "Not authorized to access this resource." })
+                res.status(401).json({ message: "Not authorized to access this resource." });
             }
         })
         .catch(error => {
