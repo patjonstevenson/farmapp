@@ -35,9 +35,10 @@ router.post("/login", async (req, res) => {
 
   try {
     const [user] = await Users.findBy({ email });
+    const { id, first_name, last_name } = user;
     if (user && bcrypt.compareSync(password, user.password)) {
       const token = getJwtToken(user.email, user.password);
-      return res.status(200).json({ user, token });
+      return res.status(200).json({ user: { id, first_name, last_name }, token });
     } else {
       return res.status(401).json({ message: "Invalid Credentials" });
     }

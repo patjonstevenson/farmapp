@@ -19,7 +19,6 @@ router.get('/byUserId/:id', async (req, res) => {
         return res.status(500).json({ message: "Internal server error.", error });
     }
 });
-
 router.get('/:strategy_id', async (req, res) => {
     const { strategy_id } = req.params;
     try {
