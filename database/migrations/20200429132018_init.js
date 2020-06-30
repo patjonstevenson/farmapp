@@ -70,5 +70,11 @@ exports.up = function (knex) {
 };
 
 exports.down = function (knex) {
-
+    return knex.schema
+        .dropTableIfExists("valves")
+        .dropTableIfExists("pumps")
+        .dropTableIfExists("tactics")
+        .dropTableIfExists("strategies")
+        .dropTableIfExists("farms")
+        .dropTableIfExists("users");
 };

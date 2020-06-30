@@ -2,13 +2,20 @@
 
 const db = require("../database/dbConfig");
 
-const users = require("../users/users-model");
+const users = require("../resources/users/users-model");
 
 async function add(user) {
-    const [id] = await db("farmdb.users").insert(user, 'id');
-    return users.findById(id);
+    try {
+        const [id] = await db("users").insert(user, 'id');
+        return users.findById(id);
+    } catch (error) {
+        return { error };
+    }
 }
 
+
+
 module.exports = {
-    add
+    add,
+    findBy: users.findBy
 }

@@ -9,45 +9,43 @@ const { validateUser } = require('./auth-helpers');
 router.post("/register", async (req, res) => {
   const user = req.body;
 
-  const { isSuccessful, errors } = await validateUser(user);
+  try {
+    const { isSuccessful, errors } = await validateUser(user);
 
-  if (isSuccessful) {
-    const hash = bcrypt.hashSync(user.password, 12);
-    user.password = hash;
+    if (isSuccessful) {
+      const hash = bcrypt.hashSync(user.password, 12);
+      user.password = hash;
 
-    Users.add(user)
-      .then(userN => {
-        const token = getJwtToken(userN.email, userN.password);
-        res.status(200).json({ userN, token })
-      })
-      .catch(error => res.status(500).json({ message: 'Unable to retrieve new user.', error }))
-  } else {
-    res.status(400).json({ errors });
+      const userN = await Users.add(user);
+      const { password, ...new_user } = userN;
+      const token = getJwtToken(userN.email, userN.password);
+      return res.status(200).json({ user: new_user, token })
+    } else {
+      return res.status(400).json({ errors });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: 'Unable to retrieve new user.', error });
   }
+
 
 })
 
-router.post("/login", (req, res) => {
-  let { email, password } = req.body;
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-  Users.findBy({ email })
-    .then(user => {
-      user = user[0];
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const token = getJwtToken(user.email, user.password);
-        res.status(200).json({
-          message: `Welcome ${user.first_name}!`,
-          id: user.id,
-          token: token
-        });
-      } else {
-        res.status(401).json({ message: "Invalid Credentials" });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      res.status(500).json({ message: 'error logging user in!' });
-    });
+  try {
+    const [user] = await Users.findBy({ email });
+    const { id, first_name, last_name } = user;
+    if (user && bcrypt.compareSync(password, user.password)) {
+      const token = getJwtToken(user.email, user.password);
+      return res.status(200).json({ user: { id, first_name, last_name }, token });
+    } else {
+      return res.status(401).json({ message: "Invalid Credentials" });
+    }
+  } catch (error) {
+    console.log(`\nERROR logging in:\n${error}\n`);
+    return res.status(500).json({ message: 'error logging user in!' });
+  }
 });
 
 
