@@ -71,7 +71,7 @@ router.post('/', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error adding pump.', error: new_id.error });
         } else {
             const newPump = await Pump.findPumpById(new_id);
-            return res.status(200).json({ newPump });
+            return res.status(200).json(newPump);
         }
     } catch (error) {
         console.log(`\n\nERROR in POST to /pumps\n${error}`);

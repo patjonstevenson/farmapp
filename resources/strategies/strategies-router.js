@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ message: 'Error adding strategy.', error: new_id.error });
         } else {
             const newStrategy = await Strategy.findStrategyById(new_id);
-            return res.status(200).json({ newStrategy });
+            return res.status(200).json(newStrategy);
         }
     } catch (error) {
         console.log(`\n\nERROR in POST to /users/${req.body.params.id}/strategies\n${error}`);

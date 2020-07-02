@@ -69,7 +69,7 @@ router.post('/', async (req, res) => {
             console.log(`Type of new_id: ${typeof Number(new_id)}`);
             console.log(`new_id =  ${new_id}`);
             const newFarm = await Farm.findFarmsBy({ id: Number(new_id) });
-            return res.status(200).json({ newFarm });
+            return res.status(200).json(newFarm);
         }
     } catch (error) {
         console.log(`\n\nERROR in POST to /users/${id}/farms\n${error}`);

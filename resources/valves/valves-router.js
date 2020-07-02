@@ -71,7 +71,7 @@ router.post('/', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error adding valve.', error: new_id.error });
         } else {
             const newValve = await Valve.findValveById(new_id);
-            return res.status(200).json({ newValve });
+            return res.status(200).json(newValve);
         }
     } catch (error) {
         // console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
