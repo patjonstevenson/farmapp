@@ -15,15 +15,16 @@ router.get('/:id', async (req, res) => {
     try {
         // const userInfo = await User.findById(id);
         const data = await User.fetchUserResources(id);
+        const user = await User.findById(id);
         // const farms = await Farm.getFarmInfoByUser(id);
         if (data.error) {
-            console.log(`\n\nERROR in GET to /users/${req.body.params.id}\n${data.error}`);
-            res.status(500).json({ message: "Error processing farm data.", error: data.error });
+            console.log(`\n\nERROR in GET to /users/${id}\n${data.error}`);
+            res.status(500).json({ message: "Error processing user data.", error: data.error });
         } else {
-            res.status(200).json({ data });
+            res.status(200).json({ ...data, user });
         }
     } catch (error) {
-        console.log(`\n\nERROR in GET to /users/${req.params.id}\n${error}`);
+        console.log(`\n\nERROR in GET to /users/${id}\n${error}`);
         res.status(500).json({ message: "Internal server error.", error: error });
     }
 });

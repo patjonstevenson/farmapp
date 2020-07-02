@@ -20,6 +20,7 @@ const strategiesRouter = require("../resources/strategies/strategies-router");
 // Custom Middleware
 const authMiddleware = require("../auth/authenticate-middleware");
 const idMiddleware = require("../auth/validate-id-middleware");
+const loggerMiddleware = require("./logger-middleware");
 
 const testMiddleware = require("./request-path-middleware");
 // Puts params in body
@@ -30,14 +31,18 @@ const requestParamsMiddleware = require('./request-params-middleware');
 
 // Create Server
 const express = require("express");
+
 const server = express();
 
 // Apply Global Middleware
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
-// server.use(requestParamsMiddleware);
 
+server.use(loggerMiddleware);
+
+
+// server.use(requestParamsMiddleware);
 // Going to get rid of requestParamsMiddleware (bc stupid),
 // so I will need to change anywhere that gets an id from req.body.params
 // Also need to change, I think idMiddleware, to not put id in req.body
