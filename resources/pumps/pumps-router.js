@@ -80,7 +80,7 @@ router.post('/', /*idMiddleware,*/ async (req, res) => {
 });
 router.put('/:pump_id', /*idMiddleware,*/ async (req, res) => {
     const { pump_id } = req.params;
-    const { params, changes } = req.body;
+    const changes = req.body;
     console.log("CHANGES: ", changes);
     try {
         const num_changed = await Pump.updatePump(changes, pump_id);
