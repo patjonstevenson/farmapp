@@ -88,7 +88,7 @@ router.put('/:pump_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error updating pump.', error: num_changed });
         } else {
             const updatedPump = await Pump.findPumpById(pump_id);
-            return res.status(200).json({ updatedPump });
+            return res.status(200).json(updatedPump);
         }
     } catch (error) {
         console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}/pumps/${pump_id}\n${error}`);
@@ -103,7 +103,7 @@ router.delete('/:pump_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error deleting pump.', error: deleted.error });
         } else {
             // const updatedFarm = await Pump.findFarmsBy({ id: farm_id });
-            return res.status(200).json({ deleted });
+            return res.status(200).json(deleted);
         }
     } catch (error) {
         console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}/pumps/${pump_id}\n${error}`);

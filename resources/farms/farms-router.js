@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
         return res.status(400).json({ message: "user_id required for POST to /api/farms" });
     }
     try {
-        const new_id = await Farm.addFarm(farm);
+        const [new_id] = await Farm.addFarm(farm);
         if (new_id.error) {
             return res.status(400).json({ message: 'Error adding farm.', error: new_id.error });
         } else {
@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
             console.log(`typeof 8: ${typeof 8}`)
             console.log(`Type of new_id: ${typeof Number(new_id)}`);
             console.log(`new_id =  ${new_id}`);
-            const newFarm = await Farm.findFarmsBy({ id: Number(new_id) });
+            const newFarm = await Farm.findFarmById(new_id);
             return res.status(200).json(newFarm);
         }
     } catch (error) {
@@ -85,7 +85,7 @@ router.put('/:farm_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error updating farm.', error: num_changed });
         } else {
             const updatedFarm = await Farm.findFarmsBy({ id: farm_id });
-            return res.status(200).json({ updatedFarm });
+            return res.status(200).json(updatedFarm); // Do this to the rest of the resources
         }
     } catch (error) {
         console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}\n${error}`);
@@ -100,7 +100,7 @@ router.delete('/:farm_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error deleting farm.', error: deleted.error });
         } else {
             // const updatedFarm = await Farm.findFarmsBy({ id: farm_id });
-            return res.status(200).json({ deleted });
+            return res.status(200).json(deleted);
         }
     } catch (error) {
         console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}\n${error}`);

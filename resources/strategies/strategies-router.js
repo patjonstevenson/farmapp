@@ -61,7 +61,7 @@ router.put('/:strategy_id', async (req, res) => {
             return res.status(400).json({ message: 'Error updating strategy.', error: num_changed });
         } else {
             const updatedStrategy = await Strategy.findStrategyById(strategy_id);
-            return res.status(200).json({ updatedStrategy });
+            return res.status(200).json(updatedStrategy);
         }
     } catch (error) {
         console.log(`\n\nERROR in PUT to /users/${req.params.id}/strategies/${strategy_id}\n${error}`);
@@ -76,7 +76,7 @@ router.delete('/:strategy_id', async (req, res) => {
             return res.status(400).json({ message: 'Error deleting strategy.', error: deleted.error });
         } else {
             // const updatedFarm = await Strategy.findFarmsBy({ id: farm_id });
-            return res.status(200).json({ deleted });
+            return res.status(200).json(deleted);
         }
     } catch (error) {
         console.log(`\n\nERROR in DELETE to /users/${req.params.id}/strategies/${strategy_id}\n${error}`);
