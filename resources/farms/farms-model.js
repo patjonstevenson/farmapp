@@ -8,6 +8,7 @@ module.exports = {
     updateFarm,
     deleteFarm,
     findFarmsBy,
+    findFarmById,
     findFarmsByUser,
     getFarmInfoByUser,
     // Pumps
@@ -61,6 +62,10 @@ function deleteFarm(id) {
 
 function findFarmsBy(filter) {
     return db('farms').where(filter);
+}
+
+function findFarmById(id) {
+    return db('farms').where({ id }).first();
 }
 
 // TODO

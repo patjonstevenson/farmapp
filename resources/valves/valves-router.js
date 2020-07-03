@@ -71,7 +71,7 @@ router.post('/', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error adding valve.', error: new_id.error });
         } else {
             const newValve = await Valve.findValveById(new_id);
-            return res.status(200).json({ newValve });
+            return res.status(200).json(newValve);
         }
     } catch (error) {
         // console.log(`\n\nERROR in POST to /users/${req.params.id}/farms/${farm_id}/valves\n${error}`);
@@ -89,7 +89,7 @@ router.put('/:valve_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error updating valve.', error: num_changed });
         } else {
             const updatedValve = await Valve.findValveById(valve_id);
-            return res.status(200).json({ updatedValve });
+            return res.status(200).json(updatedValve);
         }
     } catch (error) {
         console.log(`\n\nERROR in PUT to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
@@ -104,7 +104,7 @@ router.delete('/:valve_id', /*idMiddleware,*/ async (req, res) => {
             return res.status(400).json({ message: 'Error deleting valve.', error: deleted.error });
         } else {
             // const updatedFarm = await Valve.findFarmsBy({ id: farm_id });
-            return res.status(200).json({ deleted });
+            return res.status(200).json(deleted);
         }
     } catch (error) {
         console.log(`\n\nERROR in DELETE to /users/${req.params.id}/farms/${req.params.farm_id}/valves/${valve_id}\n${error}`);
